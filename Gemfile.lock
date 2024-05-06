@@ -298,6 +298,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capybara
+  chunky_png (~> 1.4)
   debug
   ed25519
   importmap-rails
