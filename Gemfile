@@ -74,3 +74,5 @@ group :test do
 end
 
 gem "rqrcode", "~> 2.2"
+
+gem "chunky_png", "~> 1.4"
