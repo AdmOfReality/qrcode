@@ -2,7 +2,6 @@ class PagesController < ApplicationController
   def generate_qr
     qr_code = RQRCode::QRCode.new(params[:url].to_s)
 
-    # Генерация QR-кода в виде изображения PNG
     png = qr_code.as_png(
       resize_gte_to: false,
       resize_exactly_to: false,
@@ -13,13 +12,10 @@ class PagesController < ApplicationController
       file: nil
     )
 
-    # Преобразование изображения в размер 230x230 пикселей
     resized_png = resize_image(png, 230)
 
-    # Обрезка изображения до активной области QR-кода
     cropped_png = crop_image(resized_png)
 
-    # Отправка обрезанного изображения в ответ на запрос
     send_data cropped_png.to_blob, type: 'image/x-png', disposition: 'inline'
   end
 
