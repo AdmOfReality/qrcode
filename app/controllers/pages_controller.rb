@@ -6,13 +6,13 @@ class PagesController < ApplicationController
       resize_gte_to: false,
       resize_exactly_to: false,
       border_modules: 0,
-      fill: 'white',
+      fill: ChunkyPNG::Color::WHITE,
       color_mode: ChunkyPNG::COLOR_GRAYSCALE,
-      module_px_size: 6,
+      module_px_size: 10,
       file: nil
     )
 
-    resized_png = resize_image(png, 230)
+    resized_png = resize_image(png, 220)
 
     cropped_png = crop_image(resized_png)
 

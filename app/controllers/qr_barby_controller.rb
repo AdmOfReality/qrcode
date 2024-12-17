@@ -10,13 +10,12 @@ class QrBarbyController < ApplicationController
     # Создаем QR-код
     barcode = Barby::QrCode.new(url, level: :q)
 
-    # Генерация PNG
     png_data = Barby::PngOutputter.new(barcode).to_png(
-      xdim: 4, # Размер одного модуля (ячейки)
-      margin: 1   # Убираем отступы
+      xdim: 1,  # Размер одного модуля
+      margin: 0 # Отступы
     )
 
     # Отправляем PNG как ответ
-    send_data png_data, type: 'image/png', disposition: 'inline'
+    send_data png_data, type: 'image/x-png', disposition: 'inline'
   end
 end
