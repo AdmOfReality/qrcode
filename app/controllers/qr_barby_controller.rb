@@ -1,21 +1,42 @@
-class QrBarbyController < ApplicationController
-  require 'barby'
-  require 'barby/barcode/qr_code'
-  require 'barby/outputter/png_outputter'
+require 'barby'
+require 'barby/barcode/qr_code'
+require 'barby/outputter/png_outputter'
 
+class QrBarbyController < ApplicationController
   def qr
-    # Получаем данные для QR-кода
     url = params[:url]
 
-    # Создаем QR-код
-    barcode = Barby::QrCode.new(url, level: :q)
+    # Проверка на наличие параметра 'url'
+    if url.blank?
+      render plain: "Параметр 'url' обязателен", status: :bad_request
+      return
+    end
 
-    png_data = Barby::PngOutputter.new(barcode).to_png(
-      xdim: 1,  # Размер одного модуля
-      margin: 0 # Отступы
-    )
+    # Генерация QR-кода
+    barcode = Barby::QrCode.new(url, level: :l, size: 9)
 
-    # Отправляем PNG как ответ
-    send_data png_data, type: 'image/x-png', disposition: 'inline'
+    # Генерация PNG
+    png_output = Barby::PngOutputter.new(barcode)
+    png_output.xdim = 1 # Подбираем модульный размер
+    png_output.margin = 0 # Убираем рамки
+
+    # Получение бинарного PNG
+    png_blob = png_output.to_png
+
+    # Масштабирование до фиксированного размера 230x230
+    scaled_png = scale_png(png_blob, 230, 230)
+
+    # Отправка PNG в качестве ответа
+    send_data scaled_png, type: 'image/x-png', disposition: 'inline'
+  end
+
+  private
+
+  # Метод масштабирования PNG до фиксированных размеров
+  def scale_png(png_blob, width, height)
+    require 'chunky_png'
+    image = ChunkyPNG::Image.from_blob(png_blob)
+    scaled_image = image.resample_nearest_neighbor(width, height)
+    scaled_image.to_blob
   end
 end

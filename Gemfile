@@ -78,3 +78,4 @@ gem "rqrcode", "~> 2.2"
 gem "chunky_png", "~> 1.4"
 
 gem "barby", "~> 0.7.0"
+
