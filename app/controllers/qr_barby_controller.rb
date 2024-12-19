@@ -13,7 +13,7 @@ class QrBarbyController < ApplicationController
     end
 
     # Генерация QR-кода
-    barcode = Barby::QrCode.new(url, level: :l, size: 9)
+    barcode = Barby::QrCode.new(url, level: :l)
 
     # Генерация PNG
     png_output = Barby::PngOutputter.new(barcode)
@@ -23,8 +23,8 @@ class QrBarbyController < ApplicationController
     # Получение бинарного PNG
     png_blob = png_output.to_png
 
-    # Масштабирование до фиксированного размера 230x230
-    scaled_png = scale_png(png_blob, 230, 230)
+    # Масштабирование до фиксированного размера 120x120
+    scaled_png = scale_png(png_blob, 120, 120)
 
     # Отправка PNG в качестве ответа
     send_data scaled_png, type: 'image/x-png', disposition: 'inline'
